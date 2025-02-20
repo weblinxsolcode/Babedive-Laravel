@@ -171,9 +171,6 @@ Route::get('/account-delete/{id}', [ApiController::class, "deleteAccount"]);
 // API for Trip Deletion
 Route::get('/events-delete/{id}', [ApiController::class, 'deleteTrip']);
 
-// // API for Image Deletion
-// Route::post('/events/{eventId}/images/{imageId}', [ApiController::class, 'deleteEventImage']);
-
 
 // // API for Image Deletion
 Route::get('/images/{imageId}', [ApiController::class, 'deleteDiverImage']);

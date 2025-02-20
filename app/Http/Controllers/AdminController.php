@@ -1097,6 +1097,7 @@ class AdminController extends Controller
         $request->validate([
             "key" => "required",
             "secret" => "required",
+            "enable_checkout" => "required",
         ]);
 
         try {
@@ -1104,6 +1105,7 @@ class AdminController extends Controller
             Fianace::where("id", 1)->update([
                 "stripe_key" => $request->key,
                 "stripe_secret" => $request->secret,
+                "enable_checkout" => $request->enable_checkout
             ]);
 
             return redirect()->back()->with("success", "Setting has been implemented");
