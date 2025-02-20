@@ -233,6 +233,14 @@
                             </a>
                         </div>
 
+                        <div class="nav-item">
+                            <a class="nav-link {{ Route::is('admin.benefit.management') ? 'active' : '' }}"
+                                href="{{ route('admin.benefit.management') }}" data-placement="left">
+                                <i class="bi bi-easel-fill nav-icon"></i>
+                                <span class="nav-link-title">Benefit Management</span>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
 

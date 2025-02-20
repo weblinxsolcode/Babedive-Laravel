@@ -21,6 +21,7 @@ use App\Models\UserFeedback;
 use Illuminate\Http\Request;
 use App\Models\DiverFeedback;
 use App\Models\bannerManagement;
+use App\Models\benefitManagement;
 use App\Models\splashManagement;
 use App\Models\divingTransactions;
 use Illuminate\Support\Facades\Hash;
@@ -1267,4 +1268,71 @@ class AdminController extends Controller
             return redirect()->back()->with("error", "Somethign went wrong. Please try again later.");
         }
     }
+
+    public function benefitManagement()
+    {
+        $title = "Benefit Management";
+
+        $list = benefitManagement::latest()->get();
+
+        $data = compact("title", "list");
+
+        return view("admin.benefit.index")->with($data);
+    }
+
+    public function storeBenefit(Request $request)
+    {
+        $request->validate([
+            "heading" => "required",
+            "description" => "required"
+        ]);
+
+        try {
+
+            $new = new benefitManagement();
+            $new->heading = $request->heading;
+            $new->text = $request->description;
+            $new->save();
+
+            return redirect()->back()->with("success", "Benefit has been added successfully.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
+    public function updateBenefit($id, Request $request)
+    {
+        $request->validate([
+            "heading" => "required",
+            "description" => "required"
+        ]);
+
+        try {
+
+            benefitManagement::where("id", $id)->update([
+                "heading" => $request->heading,
+                "text" => $request->description,
+            ]);
+
+            return redirect()->back()->with("success", "Benefit has been updated successfully.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
+    public function deleteBenefit($id)
+    {
+        try {
+
+            benefitManagement::find($id)->delete();
+
+            return redirect()->back()->with("success", "Benefit has been removed from the system.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
 }

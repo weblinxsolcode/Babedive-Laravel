@@ -227,6 +227,18 @@ Route::middleware(['Admin'])->controller(AdminController::class)->name('admin.')
     // Benefit Management
     Route::prefix("benefit-management")->group(function(){
 
+        // List Of All Benefits
+        Route::get('/list', [AdminController::class, "benefitManagement"])->name("benefit.management");
+
+        // Storing Benefit
+        Route::post('/store', [AdminController::class, "storeBenefit"])->name("store.benefit");
+
+        // Deletion Of Benefit
+        Route::get('/delete/{id}', [AdminController::class, "deleteBenefit"])->name("delete.benefit");
+
+        // Updating Benefit
+        Route::post('/update/{id}', [AdminController::class, "updateBenefit"])->name("update.benefit");
+
     });
 
 });
