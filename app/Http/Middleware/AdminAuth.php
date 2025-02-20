@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminAuth
 {
+
+
     /**
      * Handle an incoming request.
      *
