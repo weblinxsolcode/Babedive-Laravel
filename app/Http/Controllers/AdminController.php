@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admins;
+use Carbon\Carbon;
 use App\Models\CMS;
-use App\Models\ContactUs;
-use App\Models\Coupons;
-use App\Models\DiverFeedback;
-use App\Models\DiveUser;
-use App\Models\divingTransactions;
-use App\Models\Event;
 use App\Models\Faqs;
-use App\Models\Fianace;
+use App\Models\Event;
+use App\Models\Users;
+use App\Models\Admins;
 use App\Models\Levels;
+use App\Models\Coupons;
+use App\Models\Fianace;
 use App\Models\Package;
 use App\Models\Reports;
+use App\Models\DiveUser;
+use App\Models\ContactUs;
 use App\Models\Transaction;
+use Illuminate\Support\Str;
 use App\Models\UserFeedback;
-use App\Models\Users;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\DiverFeedback;
+use App\Models\bannerManagement;
+use App\Models\splashManagement;
+use App\Models\divingTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -618,13 +621,6 @@ class AdminController extends Controller
         return view('admin.trips.snorklings.detail', compact('title', 'event'));
     }
 
-    // public function tripDestroy($id)
-    // {
-    //     Event::find($id)->delete();
-
-    //     return redirect()->back()->with("success", "Event has been deleted successfully.");
-    // }
-
     public function tripDestroy($id)
     {
         // Find the event by ID
@@ -929,7 +925,7 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Something went wrong. Please try again later.');
         }
     }
-    
+
      public function joiningfee()
     {
         $title = "Joining Fee";
@@ -1133,6 +1129,142 @@ class AdminController extends Controller
             return redirect()->back()->with("success", "Joining fees has been seted up !");
         } catch (\Throwable $th) {
             return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
+    public function bannerManagement()
+    {
+        $title = "Banner Management";
+
+        $list = bannerManagement::latest()->get();
+
+        $data = compact("title", "list");
+
+        return view("admin.banners.index")->with($data);
+    }
+
+    public function storeBanner(Request $request)
+    {
+        $request->validate([
+            "text" => "required",
+            "image" => "required|image|mimes:jpg,png,jpeg,gif,svg",
+        ]);
+
+        try {
+
+            $fileName = Str::random(16).'.'.$request->image->extension();
+            $request->image->move(public_path('bannerImages'), $fileName);
+
+            $new = new bannerManagement;
+            $new->text = $request->text;
+            $new->banner_image = $fileName;
+            $new->save();
+
+            return redirect()->back()->with("success", "Banner has been added successfully.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
+    public function deleteBanner($id)
+    {
+        try {
+
+            bannerManagement::find($id)->delete();
+
+            return redirect()->back()->with("success", "Banner has been removed from the system.");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Somethign went wrong. Please try again later.");
+
+        }
+    }
+
+    public function splashManagement()
+    {
+        $title = "Splash Management";
+
+        $list = splashManagement::latest()->get();
+
+        $data = compact("title", "list");
+
+        return view("admin.splash.index")->with($data);
+    }
+
+    public function storeSplash(Request $request)
+    {
+        $request->validate([
+            "image" => "required|image|mimes:jpg,png,jpeg,gif,svg",
+            "heading" => "required",
+            "description" => "required"
+        ]);
+
+        try {
+
+            $fileName = Str::random(16).'.'.$request->image->extension();
+            $request->image->move(public_path('splashImages'), $fileName);
+
+            $new = new splashManagement;
+            $new->heading = $request->heading;
+            $new->description = $request->description;
+            $new->image = $fileName;
+            $new->save();
+
+            return redirect()->back()->with("success", "Splash has been added successfully.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
+    public function updateSplash($id, Request $request)
+    {
+        $request->validate([
+            "image" => "nullable|image|mimes:jpg,png,jpeg,gif,svg",
+            "heading" => "required",
+            "description" => "required"
+        ]);
+
+        try {
+
+            $fileName = null;
+
+            if ($request->hasFile('image')) {
+                $fileName = Str::random(16).'.'.$request->image->extension();
+                $request->image->move(public_path('splashImages'), $fileName);
+            }
+
+            if($fileName == null)
+            {
+                splashManagement::where("id", $id)->update([
+                    "heading" => $request->heading,
+                    "description" => $request->description,
+                ]);
+            } else {
+                splashManagement::where("id", $id)->update([
+                    "heading" => $request->heading,
+                    "description" => $request->description,
+                    "image" => $fileName
+                ]);
+            }
+
+            return redirect()->back()->with("success", "Splash has been updated successfully.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Something went wrong. Please try again later.");
+        }
+    }
+
+    public function deleteSplash($id)
+    {
+        try {
+
+            splashManagement::find($id)->delete();
+
+            return redirect()->back()->with("success", "Splash has been removed from the system.");
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Somethign went wrong. Please try again later.");
         }
     }
 }

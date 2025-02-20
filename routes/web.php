@@ -158,20 +158,20 @@ Route::middleware(['Admin'])->controller(AdminController::class)->name('admin.')
     Route::get('/privacy-policy', [AdminController::class, "privacyPolicy"])->name('privacy');
 
 
-    
-    
+
+
     // Route For Saving Terms & COnditions
     Route::post('/store-terms', [AdminController::class, "updateTerms"])->name("store.terms");
-    
+
     // Route For Saving Privacy policy
     Route::post('/store-privacy', [AdminController::class, "updatePrivacy"])->name("store.privacy");
-    
+
     Route::get('/banners', [AdminController::class, "banner"])->name('banner');
 
     Route::post('/store-banner', [AdminController::class, "updateBanner"])->name("store.banner");
 
     Route::get('/joining-fee', [AdminController::class, "joiningfee"])->name('joiningfee');
-    
+
     Route::post('/store-joining-fee', [AdminController::class, "updateJoiningfee"])->name("store.joiningfee");
 
 
@@ -192,6 +192,43 @@ Route::middleware(['Admin'])->controller(AdminController::class)->name('admin.')
 
     // Admin Route For Updating Fianance Management
     Route::post('/update-fianance', [AdminController::class, "updateFianance"])->name("update.fianance");
+
+    // Banner Management
+    Route::prefix("banner-management")->group(function () {
+
+        // Route For List Of Banners
+        Route::get('/list', [AdminController::class, "bannerManagement"])->name("banner.management");
+
+        // Storing Banner Image
+        Route::post('/store', [AdminController::class, "storeBanner"])->name("store.banner");
+
+        // Deletion Of Banner Management
+        Route::get('/delete/{id}', [AdminController::class, "deleteBanner"])->name("delete.banner");
+
+    });
+
+    // Splash Management
+    Route::prefix("splash-management")->group(function(){
+
+        // List For Splashes
+        Route::get('/list', [AdminController::class, "splashManagement"])->name("splash.management");
+
+        // Storing Splash
+        Route::post('/store', [AdminController::class, "storeSplash"])->name("store.splash");
+
+        // Deletion Of Splash
+        Route::get('/delete/{id}', [AdminController::class, "deleteSplash"])->name("delete.splash");
+
+        // Updating Splash
+        Route::post('/update/{id}', [AdminController::class, "updateSplash"])->name("update.splash");
+
+    });
+
+    // Benefit Management
+    Route::prefix("benefit-management")->group(function(){
+
+    });
+
 });
 
 /** End Admin Dashboard  **/
