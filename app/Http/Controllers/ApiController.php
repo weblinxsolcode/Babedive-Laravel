@@ -734,7 +734,7 @@ class ApiController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        
+
          $cms = CMS::find(1);
          $joiningfee = $cms->joiningfee;
 
@@ -928,7 +928,9 @@ class ApiController extends Controller
             $finalValue = $total - $value;
         }
 
-        $dive_user->update(['total_earning' => $finalValue]);
+        dd($finalValue);
+
+        DiveUser::where("id", $event->diver_id)->update(['total_earning' => $finalValue]);
 
         for ($i = 0; $i < $qty; $i++) {
 
@@ -1627,7 +1629,7 @@ class ApiController extends Controller
     //     return response($data, 200)->header("Content-type", "Application/json");
     // }
 
- 
+
     public function deleteDiverImage ( $imageId)
     {
         $image = DiveUserImage::where('id', $imageId)->first();
