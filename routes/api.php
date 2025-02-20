@@ -178,5 +178,11 @@ Route::get('/events-delete/{id}', [ApiController::class, 'deleteTrip']);
 // // API for Image Deletion
 Route::get('/images/{imageId}', [ApiController::class, 'deleteDiverImage']);
 
-// API for Event Joining Price
-// Route::post('/setup-event-joining-price/{id}', [ApiController::class, 'setEventJoiningPrice']);
+// API for Getting Banners
+Route::get('/get-banners', [ApiController::class, 'getBanners']);
+
+// API For Getting Splash Screes
+Route::get('/get-splash-screens', [ApiController::class, 'getSplash']);
+
+// API For Getting Benefits
+Route::get('/get-benefits', [ApiController::class, 'getBenefits']);

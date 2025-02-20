@@ -2,37 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\OTPVerification;
-use App\Models\ContactUs;
-use App\Models\Coupons;
-use App\Models\DiverFeedback;
-use App\Models\DiverFollower;
-use App\Models\DiveUser;
-use App\Models\DiveUserImage;
-use App\Models\divingTransactions;
-use App\Models\Event;
-use App\Models\EventComment;
-use App\Models\EventImage;
-use App\Models\EventJoin;
-use App\Models\Package;
+use Carbon\Carbon;
 use App\Models\CMS;
 use App\Models\Faqs;
-use App\Models\Fianace;
+use App\Models\Event;
+use App\Models\Users;
 use App\Models\Levels;
+use App\Models\Coupons;
+use App\Models\Fianace;
+use App\Models\Package;
 use App\Models\Reports;
+use App\Models\DiveUser;
+use App\Models\ContactUs;
+use App\Models\EventJoin;
+use App\Models\EventImage;
 use App\Models\savedTrips;
 use App\Models\Transaction;
-use App\Models\UserFeedback;
-use App\Models\Users;
-use Carbon\Carbon;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use App\Models\EventComment;
+use App\Models\UserFeedback;
+use Illuminate\Http\Request;
+use App\Mail\OTPVerification;
+use App\Models\DiverFeedback;
+use App\Models\DiverFollower;
+use App\Models\DiveUserImage;
+use App\Models\bannerManagement;
+use App\Models\splashManagement;
+use App\Models\benefitManagement;
+use App\Models\divingTransactions;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -928,8 +931,6 @@ class ApiController extends Controller
             $finalValue = $total - $value;
         }
 
-        dd($finalValue);
-
         DiveUser::where("id", $event->diver_id)->update(['total_earning' => $finalValue]);
 
         for ($i = 0; $i < $qty; $i++) {
@@ -1606,30 +1607,6 @@ class ApiController extends Controller
     }
 
 
-    // public function deleteEventImage($eventId, $imageId)
-    // {
-    //     $image = EventImage::where('id', $imageId)->where('event_id', $eventId)->first();
-
-    //     if (!$image) {
-    //         $message = "Image not found or does not belong to this event.";
-    //         $data = compact("message");
-    //         return response($data, 404)->header("Content-type", "Application/json");
-    //     }
-
-    //     // Delete the image file from the public directory
-    //     $imagePath = public_path('GalleryImages/' . $image->image);
-    //     if (file_exists($imagePath)) {
-    //         unlink($imagePath); // Remove the file
-    //     }
-
-    //     $image->delete();
-
-    //     $message = "Image has been deleted successfully.";
-    //     $data = compact("message");
-    //     return response($data, 200)->header("Content-type", "Application/json");
-    // }
-
-
     public function deleteDiverImage ( $imageId)
     {
         $image = DiveUserImage::where('id', $imageId)->first();
@@ -1653,7 +1630,33 @@ class ApiController extends Controller
         return response($data, 200)->header("Content-type", "Application/json");
     }
 
+    public function getBanners()
+    {
+        $list = bannerManagement::latest()->get();
 
+        $data = compact("list");
+
+        return response($data, 200)->header("Content-type", "Application/json");
+    }
+
+    public function getBenefits()
+    {
+        $list = benefitManagement::latest()->get();
+
+        $data = compact("list");
+
+        return response($data, 200)->header("Content-type", "Application/json");
+    }
+
+
+    public function getSplash()
+    {
+        $list = splashManagement::latest()->get();
+
+        $data = compact("list");
+
+        return response($data, 200)->header("Content-type", "Application/json");
+    }
 
 
 }
