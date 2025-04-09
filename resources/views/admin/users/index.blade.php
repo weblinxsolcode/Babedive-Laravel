@@ -285,6 +285,7 @@
                                         <i class="bi-eye-fill me-1"></i>
                                     </a>
 
+                                    {{-- <a href="{{ route('admin.user.delete', $user->id) }}" --}}
                                     <a href="{{ route('admin.user.delete', $user->id) }}"
                                         class="btn btn-white btn-sm btn-outline-danger border-danger">
                                         <i class="bi bi-trash-fill me-1"></i> <!-- Trash icon for delete -->
